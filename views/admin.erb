@@ -5,7 +5,7 @@
       var ws;
 
       function adminChangeColor(color){
-        ws.send(color);
+        ws.send("change: " + color);
       }
       function change(color){
         $("body").css("background-color", color);
@@ -18,7 +18,7 @@
           var command = event.data.split(": ");
           var method = command[0];
           var param = command[1];
-          this[method](param);
+          window[method](param);
         };
         return socket;
       }
