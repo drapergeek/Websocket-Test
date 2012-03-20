@@ -29,7 +29,7 @@
 
       function ping_loop(socket){
         setTimeout(function(){
-          socket.send("ping: " + new Time());
+          socket.send("ping: " + new Date());
           ping_loop(socket);
         }, 1000);
       }
