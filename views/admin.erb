@@ -15,13 +15,28 @@
         socket = new WebSocket("ws://ui.thoughtbot.com:9000");
         socket.onmessage = function(event) {
           console.log(event.data);
-          change(event.data);
+          var command = event.data.split(": ");
+          var method = command[0];
+          var param = command[1];
+          this[method](param);
         };
         return socket;
       }
 
+      function ping(time){
+        console.log("ping: " + time);
+      }
+
+      function ping_loop(socket){
+        setTimeout(function(){
+          socket.send("ping: " + new Time());
+          ping_loop(socket);
+        }, 1000);
+      }
+
       $(function($) {
         ws = socket();
+        ping_loop(ws);
 
         $('#send-change').submit(function() {
           color = $("#send-change-text").val();
@@ -39,8 +54,6 @@
       <input type="text" id="send-change-text" />
       <input type="submit">
     </form>
-
-
   </body>
 </html>
 
