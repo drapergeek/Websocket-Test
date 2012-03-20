@@ -38,6 +38,9 @@
         ws = socket();
         ping_loop(ws);
 
+        alert("non-native!");
+        navigator.notification.alert("native!");
+
         $('#send-change').submit(function() {
           color = $("#send-change-text").val();
           $("#send-change-text").val("");
