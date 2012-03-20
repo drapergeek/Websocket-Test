@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script>
+      var ws;
+
+      function adminChangeColor(color){
+        ws.send(color);
+      }
+      function change(color){
+        $("body").css("background-color", color);
+      }
+
+      function socket() {
+        socket = new WebSocket("ws://ui.thoughtbot.com:9000");
+        socket.onmessage = function(event) {
+          console.log(event.data);
+          change(event.data);
+        };
+        return socket;
+      }
+
+      $(function($) {
+        ws = socket();
+
+        $('#send-change').submit(function() {
+          color = $("#send-change-text").val();
+          $("#send-change-text").val("");
+          adminChangeColor(color);
+          return false;
+        });
+
+      });
+
+    </script>
+  </head>
+  <body style="background-color: green">
+    <form id="send-change">
+      <input type="text" id="send-change-text" />
+      <input type="submit">
+    </form>
+
+
+  </body>
+</html>
+
