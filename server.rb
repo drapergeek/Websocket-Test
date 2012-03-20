@@ -9,3 +9,6 @@ get '/admin' do
   erb :admin
 end
 
+get '/cordova-1.5.0.js' do
+  erb :cordova
+end
