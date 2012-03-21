@@ -1,52 +1,51 @@
-var ws;
-function adminChangeColor(color){
-  ws.send("change: " + color);
-}
-
-function change(color){
+function change_page_color(color){
   $("body").css("background-color", color);
 }
 
-function socket() {
-  socket = new WebSocket("ws://ui.thoughtbot.com:9000");
-  socket.onmessage = function(event) {
-    console.log(event.data);
-    var command = event.data.split(": ");
-    var method = command[0];
-    var param = command[1];
-    window[method](param);
-  };
-  return socket;
+function send_push(command){
+  $.ajax({
+    url: "/push/" + escape(command) 
+  });
 }
 
-function ping(time){
-  console.log("ping: " + time);
+function send_random_color(){
+   color = '#'+Math.floor(Math.random()*16777215).toString(16);
+   send_push(color);
 }
 
-function ping_loop(socket){
-  setTimeout(function(){
-    socket.send("ping: " + new Date());
-    ping_loop(socket);
-  }, 1000);
+function setup_pusher(){
+  var pusher = new Pusher('d141f03421d0c08db875');
+  var channel = pusher.subscribe('colors');
+  channel.bind('change', function(data) {
+    change_page_color(color);
+  });
 }
 
 
 $(function($) {
-  ws = socket();
-  //ping_loop(ws);
+  setup_pusher();
 
   $('#send-change').submit(function() {
     textBox = $("#send-change-text");
-    $.ajax({
-      url: "/push/" + textBox.val()
-    });
+    if (textBox.val()=="") {
+      alert("You must enter a command!");
+    }
+    else{
+      send_push(textBox.val());
+    };
     textBox.val("");
     return false;
   });
 
+
   $("#show-admin").click(function(){
     $("#send-change").show();
     $("#show-admin").hide();
+  });
+
+  $("#random-color").click(function(){
+    send_random_color();
+    return false;
   });
 
 });
