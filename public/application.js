@@ -8,8 +8,6 @@ function send_push(command){
   });
 }
 
-
-
 function random_color(){
    return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
@@ -30,7 +28,6 @@ function send_random_fade(){
     data: data
   });
 }
-
 
 function setup_pusher(){
   var pusher = new Pusher('d141f03421d0c08db875');
@@ -53,11 +50,10 @@ function fadeInBox(from_color, to_color, delay){
   $("#box1").show();
   $("#box2").fadeIn(delay);
   $("#box1").fadeOut(delay);
-
 }
 
-
 $(function($) {
+
   setup_pusher();
 
   $("#show-admin").click(function(){
@@ -73,6 +69,5 @@ $(function($) {
   $("#random-fade").click(function(){
     send_random_fade();
   });
-
 
 });
