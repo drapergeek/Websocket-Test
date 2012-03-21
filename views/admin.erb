@@ -1,13 +1,13 @@
 <html>
   <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript" charset="utf-8" src="cordova-1.5.0.js"></script>
     <script>
       var ws;
 
       function adminChangeColor(color){
         ws.send("change: " + color);
       }
+
       function change(color){
         $("body").css("background-color", color);
       }
@@ -37,24 +37,29 @@
 
       $(function($) {
         ws = socket();
-        ping_loop(ws);
-
-        alert("non-native!");
-        navigator.notification.alert("native!");
+        //ping_loop(ws);
 
         $('#send-change').submit(function() {
-          color = $("#send-change-text").val();
-          $("#send-change-text").val("");
-          adminChangeColor(color);
+          textBox = $("#send-change-text");
+          $.ajax({
+            url: "/push/" + textBox.val()
+           });
+           textBox.val("");
           return false;
+        });
+
+        $("#show-admin").click(function(){
+          $("#send-change").show();
+          $("#show-admin").hide();
         });
 
       });
 
     </script>
   </head>
-  <body style="background-color: green">
-    <form id="send-change">
+  <body style="background-color: white">
+    <small><a href="#" id="show-admin" >Show Admin</a></small>
+    <form id="send-change" style="display:none">
       <input type="text" id="send-change-text" />
       <input type="submit">
     </form>
