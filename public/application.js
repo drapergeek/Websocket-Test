@@ -4,20 +4,20 @@ function change_page_color(color){
 
 function send_push(command){
   $.ajax({
-    url: "/push/" + escape(command) 
+    url: "/push/" + command 
   });
 }
 
 function send_random_color(){
    color = '#'+Math.floor(Math.random()*16777215).toString(16);
-   send_push(color);
+   send_push(escape(color));
 }
 
 function setup_pusher(){
   var pusher = new Pusher('d141f03421d0c08db875');
   var channel = pusher.subscribe('colors');
   channel.bind('change', function(data) {
-    change_page_color(color);
+    change_page_color(data.message);
   });
 }
 
